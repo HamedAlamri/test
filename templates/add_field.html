@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Field
+{% endblock %}
+
+{% block body %}
+<h3 style="text-align: center; margin-bottom: 1cm;">Add Field</h3>
+
+<div>
+    <form action="/manger/fields/addField" method="post">
+        <h4 class="information_add">Field Information</h4>
+        <div style="text-align: center;">
+            <input class="inputs_add" autocomplete="off" autofocus type="text" name="fieldName" placeholder="Field Name">
+            <input class="inputs_add" autocomplete="off" type="text" name="location" placeholder="Location Name">
+            <input class="inputs_add" autocomplete="off" type="text" name="imgURL" placeholder="Field Image URL">
+            <input class="inputs_add" autocomplete="off" type="text" name="mapURL" placeholder="Map URL">
+            <input class="inputs_add" autocomplete="off" type="text" name="username" placeholder="Username">
+            <input class="inputs_add" autocomplete="off" type="password" name="password" placeholder="Password">
+            <input class="inputs_add" autocomplete="off" type="password" name="password_confirm" placeholder="Confirm Password">
+        </div>
+
+        <div class="inputs_add">
+            <h6>Field size and price</h6>
+            <div style="margin: 20px;">
+                {% for size in sizes %}
+                <div style="margin-bottom: 10px;">
+                    <input type="checkbox" name="size" value="{{ size }}" id="size_{{ size }}" onchange="togglePriceInput('{{ size }}')"> {{ size }}
+                    <input class="inputs_add" autocomplete="off" type="number" name="price" placeholder="Price In R.O" id="price_{{ size }}" style="margin-left: 10px;" disabled>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!--time-->
+        <div style="margin: 20px;">
+            <h6>Choose the time</h6>
+            {% for time in times %}
+                <span style="display: inline-block; margin: 10px;">
+                    <input type="checkbox" name="time" value="{{ time }}"> {{ time }}
+                </span>
+            {% endfor %}
+        </div>
+
+        <hr>
+
+        <div style="margin: 20px;">
+            <h4 class="information_add">Manager Information</h4>
+            <input class="inputs_add" autocomplete="off" type="text" name="manager_name" placeholder="Manager Name">
+            <input class="inputs_add" autocomplete="off" type="tel" name="manager_phone_number" placeholder="Phone Number">
+            <button type="submit" class="btn btn-primary">Add Field</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function togglePriceInput(size) {
+    var checkbox = document.getElementById('size_' + size);
+    var priceInput = document.getElementById('price_' + size);
+    priceInput.disabled = !checkbox.checked;
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+<span>
+    <h4>person info: {{ info.person_name }} / {{ info.phone_number }}</h4>
+    <h4>field info: {{ info.field_name }} / {{ info.size}}</h4>
+    <h4>Day and time: {{ info.day }} / {{ info.time }}</h4>
+    <h4>Price: {{ info.price }} R.O</h4>
+</span>
+
+<span>
+    <form action="/cancel" method="post">
+        <input name="order_id" hidden value="{{ info.id_order }}">
+        <button type="submit" class="btn btn-primary">Cancel the order</button>
+    </form>
+</span>

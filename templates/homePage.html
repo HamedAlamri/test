@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home Page
+{% endblock %}
+
+{% block body %}
+    <style>
+        .field-container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+            transition: transform 0.2s;
+        }
+        .field-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .field-image {
+            width: 370px; /* Set image width */
+            height: 250px; /* Set image height */
+            object-fit: cover; /* Ensure image covers the button without stretching */
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+        .field-container:hover .field-image {
+            transform: scale(1.05);
+        }
+        .btn-submit {
+            padding: 0; /* Remove button padding */
+            border: none; /* Remove button border */
+            width: 100%; /* Set button width */
+            height: auto; /* Allow button height to adjust based on content */
+            border-radius: 10px;
+            transition: transform 0.2s;
+            overflow: hidden; /* Hide overflowing content */
+        }
+        .field-container:hover .btn-submit {
+            transform: translateY(-2px);
+        }
+        .field-info {
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+
+    <div class="container">
+        <h2 class="text-center mt-5 mb-4">Available Fields</h2>
+        <div class="row">
+            {% for info in infos %}
+                <div class="col-md-4">
+                    <div class="field-container">
+                        <form action="/" method="post">
+                            <button class="btn btn-submit" name="field_id" value="{{ info.field_id }}" type="submit">
+                                <img class="field-image" src="{{ info.imgURL }}" alt="{{ info.field_name }}">
+                            </button>
+                        </form>
+                        <div class="field-info">
+                            <h4>{{ info.field_name }} / {{ info.location_name }}</h4>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

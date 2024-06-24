@@ -1,0 +1,258 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ name }}
+{% endblock %}
+
+{% block body %}
+    <style>
+        /* Override specific styles for this page */
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        h6 {
+            margin-top: 15px;
+            font-size: 1.25rem;
+            color: #007bff;
+        }
+
+        form button {
+            border: none;
+            background: none;
+            padding: 0;
+            margin: 20px auto;
+            display: block;
+            transition: transform 0.3s;
+        }
+
+        form button:hover {
+            transform: scale(1.05);
+        }
+
+        img {
+            width: 100%;
+            max-width: 220px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        select, input[type="date"] {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s, background-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        select:focus, input[type="date"]:focus {
+            outline: none;
+            border-color: #007bff;
+            background-color: #fff;
+        }
+
+        button.btn-primary {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button.btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        /* Grid layout for sections */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-item {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .calendar-container h1 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+
+        .day-name {
+            margin-top: 20px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            h3 {
+                font-size: 1.75rem;
+            }
+
+            .calendar-container h1 {
+                font-size: 1.25rem;
+            }
+
+            .day-name {
+                font-size: 1rem;
+            }
+        }
+    </style>
+
+    <div class="container">
+        <h3>{{ name }} Field</h3>
+        <div class="grid-container">
+            <!-- Location Section -->
+            <div class="grid-item">
+                <form action="{{ map }}">
+                    <button name="map" type="submit">
+                        <img src="/static/map2.png" alt="Map">
+                    </button>
+                </form>
+                <h6>Location</h6>
+            </div>
+
+            <!-- Calendar Section -->
+            <div class="grid-item calendar-container">
+                <h1>Select a Date</h1>
+                <input type="date" id="datePicker" min="{{ current_date }}" onchange="showDayName(); updateTimes();">
+                <div class="day-name" id="dayName"></div>
+            </div>
+
+            <!-- Time and Size Selection Section -->
+            <div class="grid-item">
+                <form action="/order" method="get">
+                    <select id="size" onchange="updateTimes();">
+                        <option disabled selected>Size</option>
+                        {% for size in sizes %}
+                            <option value="{{ size }}">{{ size }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <select id="time" disabled onchange="getTime(this.value)">
+                        <option disabled selected>Time</option>
+                    </select>
+
+                    <input id="date_input" name="date_input" type="hidden" value="">
+                    <input id="time_input" name="time_input" type="hidden" value="">
+                    <input id="size_input" name="size_input" type="hidden" value="">
+                    <input hidden id="field_id" name="field_id" type="hidden" value="{{ field_id }}">
+
+                    <button disabled class="btn btn-primary" type="submit" id="button" name="orderInfo">Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let time_element = document.querySelector("#time");
+        let size_element = document.querySelector("#size");
+        let button_element = document.querySelector("#button");
+
+        let date_input_element = document.querySelector("#date_input");
+        let time_input_element = document.querySelector("#time_input");
+        let size_input_element = document.querySelector("#size_input");
+
+        let field_id = document.querySelector("#field_id").value;
+
+        let final_date_value;
+        let final_time_value;
+        let final_size_value;
+
+        function updateTimes() {
+            final_date_value = document.querySelector("#datePicker").value;
+
+            // Set default size to "half field" if not already selected
+            if (final_date_value && !size_element.value) {
+                size_element.value = "half field";  // Ensure this value matches one of the options
+            }
+
+            final_size_value = size_element.value;
+
+            if (final_date_value && final_size_value) {
+                date_input_element.value = final_date_value;
+                size_input_element.value = final_size_value;
+
+                // Fetch available times with the size and date input as parameters
+                fetch(`/search?size=${final_size_value}&date=${final_date_value}&field_id=${field_id}`)
+                    .then(response => response.json())
+                    .then(result => {
+                        time_element.innerHTML = '<option disabled selected>Time</option>';
+                        result.times.forEach(time => {
+                            let option = document.createElement("option");
+                            option.value = time;
+                            option.text = time;
+                            time_element.appendChild(option);
+                        });
+                        time_element.disabled = false;
+                    });
+            } else {
+                time_element.disabled = true;
+                button_element.disabled = true;
+            }
+        }
+
+        function getTime(time_value) {
+            console.log(time_value);
+
+            if (time_value != "") {
+                final_time_value = time_value;
+                time_input_element.value = final_time_value;
+                button_element.disabled = false;
+            } else {
+                button_element.disabled = true;
+            }
+        }
+
+        function showDayName() {
+            const dateInput = document.getElementById('datePicker').value;
+            const dayNameElement = document.getElementById('dayName');
+
+            if (dateInput) {
+                const date = new Date(dateInput);
+                const options = { weekday: 'long' };
+                const dayName = new Intl.DateTimeFormat('en-US', options).format(date);
+
+                dayNameElement.textContent = `Day of the Week: ${dayName}`;
+            } else {
+                dayNameElement.textContent = '';
+            }
+        }
+
+        // Set the minimum date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const datePicker = document.getElementById('datePicker');
+            const today = new Date().toISOString().split('T')[0];
+            datePicker.setAttribute('min', today);
+        });
+    </script>
+{% endblock %}

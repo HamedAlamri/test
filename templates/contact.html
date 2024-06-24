@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Contact With Us
+{% endblock %}
+
+{% block body %}
+
+<style>
+    .cover-section {
+    background-color: #343a40;
+    padding: 50px 0;
+}
+
+.cover-section img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 50%;
+    border: 5px solid #fff;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-top: 20px;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #6c757d;
+}
+
+.contact-info p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.contact-info a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+</style>
+
+<!-- Cover Section -->
+<div class="cover-section text-center" style="background-color: #343a40; padding: 50px 0;">
+    <img src="/static/CyperMAX.jpg" alt="CyperMax Logo" style="max-width: 200px; height: auto;">
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Contact With Us</h1>
+            <p>Welcome to CyperMax! We are dedicated to providing the best service and products to our customers. Feel free to reach out to us through any of the contact methods below.</p>
+            <div class="contact-info mt-4">
+                <p><strong>Phone:</strong> <a href="tel:+96899873014">+968 99873014</a></p>
+                <p><strong>Email:</strong> <a href="mailto:cypermax0@gmail.com">cypermax0@gmail.com</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

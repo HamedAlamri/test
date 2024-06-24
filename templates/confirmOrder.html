@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Confirm Order
+{% endblock %}
+
+{% block body %}
+    <style>
+        /* Container styling */
+        .container {
+            text-align: center;
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 0 15px;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        /* Image styling */
+        .confirmation-image img {
+            margin-top: 30px;
+            margin-bottom: 20px;
+            max-width: 100%; /* Ensure image scales with container */
+            height: auto;
+        }
+
+        /* Return button styling */
+        .return-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        /* Order details styling */
+        .order-details h2, .order-details h5 {
+            margin: 10px 0;
+        }
+    </style>
+
+    <div class="container">
+        <h4>Thank You, Your Order Has Been Confirmed:</h4>
+        <div class="order-details">
+            <h2>Order ID: {{ order_id }}</h2>
+            <h5>Field Info: {{ name }}</h5>
+            <h5>Time: {{ date }} at {{ time }}</h5>
+            <h5>Size: {{ size }}</h5>
+            <h5>Price: {{ price }}</h5>
+        </div>
+
+        <h4>You will receive a message from (+1 7622366398) with all order information.</h4>
+
+        <!-- Confirmation image -->
+        <div class="confirmation-image">
+            <img src="https://rb.gy/a7u9dj" alt="Confirmation Image">
+        </div>
+
+        <!-- Return to Home Page button -->
+        <div class="return-button">
+            <a href="/" class="btn btn-primary">Return To Home Page</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+
+<!--this page for submangers to check the orders-->
+
+{% block title %}
+    mange orders
+{% endblock %}
+
+
+{% block body %}
+
+    <div>
+        <h3 style="text-align: center; margin-bottom: 1cm; ">All booked Times For {{ field_name }}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Name Of Person</th>
+                    <th>Phone Number</th>
+                    <th>Field Size</th>
+                    <th>Time</th>
+                    <th>Price</th>
+                    <th>To MORE INFO</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for info in infos %}
+                    <tr>
+                        <td>{{ info.id_order }}</td>
+                        <td>{{ info.person_name }}</td>
+                        <td>{{ info.phone_number }}</td>
+                        <td>{{ info.size }}</td>
+                        <td>{{ info.time }}</td>
+                        <td>{{ info.price }} R.O</td>
+                        <td>
+                            <span style="margin: 1px;">
+                                <form action="/fieldsMangers/DirectSubMangers/orderState" method="get" style="margin: 0px;">
+                                    <input hidden name ="from" value = "{{ from_ }}">
+                                    <button class="btn btn-primary" style="margin: 0px;" type="submit" name="orderCompleted" value="{{ info.id_order }}">
+                                        Done
+                                    </button>
+                                </form>
+                            </span>
+
+                            <span style="margin: 1px;">
+                                <form action="/fieldsMangers/DirectSubMangers/orderState" method="post" style="margin: 0px;">
+                                    <input hidden name ="from" value = "{{ from_ }}">
+                                    <button class="btn btn-primary" style="margin: 0px;" type="submit" name="orderInfo" value="{{ info.id_order }}">
+                                        Check
+                                    </button>
+                                </form>
+                            </span>
+
+                            <span style="margin: 1px;">
+                                <form action="/orderReport" method="post" style="margin: 0px;">
+                                    <button class="btn btn-primary" style="margin: 0px;" type="submit" name="orderReport" value="{{ info.id_order }}">
+                                        Report (does not work)
+                                    </button>
+                                </form>
+                            </span>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

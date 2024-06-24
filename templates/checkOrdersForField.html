@@ -1,0 +1,348 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Field Orders
+{% endblock %}
+
+{% block body %}
+<h3 class="text-center mb-5">Check Field Orders</h3>
+
+<div class="container">
+    <input hidden name="field_name" value="{{ infos.field_name }}">
+    <div class="row">
+        <!-- Period -->
+        <div class="col-md-3 mb-3 order-md-1">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Period</h4>
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="all" name="period" class="custom-control-input" value="all" checked>
+                            <label class="custom-control-label" for="all">All</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="toPay" name="period" class="custom-control-input" value="toPay">
+                            <label class="custom-control-label" for="toPay">To Pay</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="specifiData" name="period" class="custom-control-input" value="specifiData">
+                            <label class="custom-control-label" for="specifiData">Specific Data</label>
+                        </div>
+
+                        <!-- Date Range -->
+                        <div id="dateRangeContainer" class="grid-item calendar-container" hidden>
+                            <h5 style="margin-top: 10px;">Select a Date Range</h5>
+                            <label for="startDate">Start Date:</label>
+                            <input style="margin-bottom: 10px;" type="date" id="startDate" onchange="updateDateRange();">
+                            <label for="endDate">End Date:</label>
+                            <input type="date" id="endDate" onchange="updateDateRange();">
+                            <div class="day-name" id="dateRange"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Status -->
+        <div class="col-md-3 mb-3 order-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Order Status</h4>
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="booked" name="status" class="custom-control-input" value="Booked" checked>
+                            <label class="custom-control-label" for="booked">Booked</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="completed" name="status" class="custom-control-input" value="Done">
+                            <label class="custom-control-label" for="completed">Completed</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="cancelled" name="status" class="custom-control-input" value="canceled">
+                            <label class="custom-control-label" for="cancelled">Cancelled</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Information -->
+        <div class="col-md-6 mb-3 order-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Financial Information</h4>
+                    <p class="card-text"><strong>Total Money:</strong> <span id="total-money">{{ money }}</span></p>
+                    <p class="card-text"><strong>Total Profits:</strong> <span id="total-profits">{{ profits }}</span></p>
+                    <p class="card-text"><strong>Net Money:</strong> <span id="total-netMoney">{{ netMoney }}</span></p>
+                    <p class="card-text"><strong>Total Count:</strong> <span id="total-count">{{ counts }}</span></p>
+                </div>
+                <!-- Print Button -->
+                <input hidden id="field_id" name="field_id" value="{{ infos.field_id }}">
+                <button class="btn btn-secondary mt-3" onclick="generatePDF()">Save as PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="row">
+        <div class="col-12">
+            <table class="table mt-4" id="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Name Of Person</th>
+                        <th>Phone Number</th>
+                        <th>Name Of Field</th>
+                        <th>Day And Time</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-tbody">
+                    {% for info in infos %}
+                    <tr>
+                        <td>{{ info.id_order }}</td>
+                        <td>{{ info.person_name }}</td>
+                        <td>{{ info.phone_number }}</td>
+                        <td>{{ info.field_name }} / {{ info.size }}</td>
+                        <td>{{ info.day }} / {{ info.time }}</td>
+                        <td>{{ info.price }} R.O</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+    let field_id = document.querySelector("#field_id").value;
+
+    // Initialize date range container element
+    const dateRangeContainer = document.querySelector("#dateRangeContainer");
+
+    // Function to toggle date range container visibility
+    function toggleDateRange() {
+        const period = document.querySelector('input[name="period"]:checked').value;
+        dateRangeContainer.hidden = period !== 'specifiData';
+    }
+
+    // Flag to track whether the fetch should be triggered
+    let shouldFetch = false;
+
+    // Function to update date range
+    function updateDateRange() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (startDate) {
+            document.getElementById('endDate').min = startDate;
+        }
+
+        const dateRangeElement = document.getElementById('dateRange');
+        if (startDate && endDate) {
+            dateRangeElement.textContent = `Selected Range: ${startDate} to ${endDate}`;
+            const status = document.querySelector('input[name="status"]:checked').value;
+            shouldFetch = true; // Set flag to true to trigger fetch
+        } else {
+            dateRangeElement.textContent = '';
+            shouldFetch = false; // Set flag to false to avoid unnecessary fetch
+        }
+
+        if (shouldFetch) {
+            const status = document.querySelector('input[name="status"]:checked').value;
+            fetchFinancialInfo(status, startDate, endDate);
+        }
+    }
+
+    // Event listeners for period radio buttons
+    document.querySelectorAll('input[name="period"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            toggleDateRange();
+            const status = document.querySelector('input[name="status"]:checked').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            shouldFetch = true; // Set flag to true to trigger fetch
+            fetchFinancialInfo(status, startDate, endDate);
+        });
+    });
+
+    // Event listeners for status radio buttons
+    document.querySelectorAll('input[name="status"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const status = this.value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            shouldFetch = true; // Set flag to true to trigger fetch
+            fetchFinancialInfo(status, startDate, endDate);
+        });
+    });
+
+// Event listener for startDate input change
+document.getElementById('startDate').addEventListener('change', function() {
+    updateDateRange();
+});
+
+// Event listener for endDate input change
+document.getElementById('endDate').addEventListener('change', function() {
+    updateDateRange();
+});
+
+
+    // Initial call to set the correct state
+    toggleDateRange();
+
+    // Set max date to today for date inputs
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('startDate').max = today;
+        document.getElementById('endDate').max = today;
+    });
+
+    // Function to update date range
+    function updateDateRange() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (startDate) {
+            document.getElementById('endDate').min = startDate;
+        }
+
+        const dateRangeElement = document.getElementById('dateRange');
+        if (startDate && endDate) {
+            dateRangeElement.textContent = `Selected Range: ${startDate} to ${endDate}`;
+            const status = document.querySelector('input[name="status"]:checked').value;
+            fetchFinancialInfo(status, startDate, endDate); // Fetch financial info for the selected date range
+        } else {
+            dateRangeElement.textContent = '';
+        }
+    }
+
+    // Function to update financial info based on selected status
+    function updateStatus() {
+        const status = document.querySelector('input[name="status"]:checked').value;
+        fetchFinancialInfo(status);
+    }
+
+
+    // Fetch initial financial information
+    function fetchFinancialInfo(status, startDate = null, endDate = null) {
+        const period = document.querySelector('input[name="period"]:checked').value;
+        let url = `/update_orders?field_id=${field_id}&status=${status}&period=${period}`;
+        if (period === "specifiData" && startDate && endDate) {
+            url += `&start_date=${startDate}&end_date=${endDate}`;
+        }
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('total-money').textContent = data.total;
+                document.getElementById('total-profits').textContent = data.profit;
+                document.getElementById('total-netMoney').textContent = parseFloat(data.total) - parseFloat(data.profit);
+                document.getElementById('total-count').textContent = data.count;
+
+                // Update the orders table
+                const ordersTbody = document.getElementById('orders-tbody');
+                ordersTbody.innerHTML = '';
+                data.infos.forEach(info => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${info.id_order}</td>
+                        <td>${info.person_name}</td>
+                        <td>${info.phone_number}</td>
+                        <td>${info.field_name} / ${info.size}</td>
+                        <td>${info.day} / ${info.time}</td>
+                        <td>${info.price} R.O</td>
+                    `;
+                    ordersTbody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching financial information:', error));
+    }
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchFinancialInfo('Booked'); // Fetch financial info for 'Booked' status
+    });
+
+    // Generate PDF of orders table
+    function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Define margins
+    const margin = 15;
+    const pdfWidth = doc.internal.pageSize.getWidth();
+    const pdfHeight = doc.internal.pageSize.getHeight();
+    const contentWidth = pdfWidth - 2 * margin;
+    const contentHeight = pdfHeight - 2 * margin;
+
+    // Get the financial information
+    const totalMoney = document.getElementById('total-money').textContent;
+    const totalProfits = document.getElementById('total-profits').textContent;
+    const totalCount = document.getElementById('total-count').textContent;
+    const netMoney = parseFloat(totalMoney) - parseFloat(totalProfits);
+
+    // Get the current date
+    const date = new Date().toLocaleString();
+
+    // Add financial information and date to the PDF
+    doc.setFontSize(16);
+    doc.text('Financial Information', margin, margin);
+    doc.setFontSize(12);
+    doc.text(`Total Money: ${totalMoney} R.O`, margin + 5, margin + 10);
+    doc.text(`Total Profits: ${totalProfits} R.O`, margin + 5, margin + 20);
+    doc.text(`Net Money: ${netMoney} R.O`, margin + 5, margin + 30);
+    doc.text(`Total Count: ${totalCount}`, margin + 5, margin + 40);
+    doc.text(`Date of Printing: ${date}`, margin + 5, margin + 50);
+
+    // Add a space before the table
+    let yPosition = margin + 65;
+    doc.text('Orders Table', margin, yPosition);
+    yPosition += 10;
+
+    // Capture the orders table as an image
+    const ordersTable = document.querySelector('#orders-table');
+    html2canvas(ordersTable, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = contentWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        let remainingHeight = imgHeight;
+        let canvasY = 0;
+
+        while (remainingHeight > 0) {
+            let pageHeightRemaining = contentHeight - yPosition;
+
+            if (remainingHeight > pageHeightRemaining) {
+                // Create a temporary canvas to store the current part of the image
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = (pageHeightRemaining * canvas.width) / imgWidth;
+                const ctx = tempCanvas.getContext('2d');
+                ctx.drawImage(canvas, 0, canvasY, canvas.width, tempCanvas.height, 0, 0, canvas.width, tempCanvas.height);
+
+                const tempImgData = tempCanvas.toDataURL('image/png');
+                doc.addImage(tempImgData, 'PNG', margin, yPosition, imgWidth, pageHeightRemaining);
+
+                remainingHeight -= pageHeightRemaining;
+                canvasY += tempCanvas.height;
+                doc.addPage();
+                yPosition = margin;
+            } else {
+                doc.addImage(imgData, 'PNG', margin, yPosition, imgWidth, remainingHeight);
+                remainingHeight = 0;
+            }
+        }
+
+        // Save the PDF
+        doc.save('orders.pdf');
+    });
+}
+
+
+
+</script>
+{% endblock %}

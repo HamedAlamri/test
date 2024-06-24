@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+
+<!--this page for submangers to check the completed orders-->
+
+{% block title %}
+    completed orders
+{% endblock %}
+
+
+{% block body %}
+
+    <div>
+        <h3 style="text-align: center; margin-bottom: 1cm; ">All Completed Orders For {{ field_name }}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Name Of Person</th>
+                    <th>Phone Number</th>
+                    <th>Name Of Field</th>
+                    <th>Day And Time</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for info in infos %}
+                    <tr>
+                        <td>{{ info.id_order }}</td>
+                        <td>{{ info.person_name }}</td>
+                        <td>{{ info.phone_number }}</td>
+                        <td>{{ info.field_name }} / {{ info.size }}</td>
+                        <td>{{ info.day }} / {{ info.time }}</td>
+                        <td>{{ info.price }} R.O</td>
+                    </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

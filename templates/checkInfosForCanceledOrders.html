@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+<!--This page to check all information for specific order-->
+
+{% block title %}
+    Check canceld order
+{% endblock %}
+
+
+{% block body %}
+<h3 style="text-align: center; margin-bottom: 1cm; ">Check canceled order</h3>
+
+    <div style="margin: 20px;">
+        <h4>canceled Id: {{ infos.id}}</h4>
+        <h4>person: {{ infos.person_name}}</h4>
+        <h4>Number: {{ infos.person_number}}</h4>
+        <h4>Field ID: {{ infos.field_id}}</h4>
+        <h4>Size: {{ infos.size}}</h4>
+        <h4>Day: {{ infos.day}}</h4>
+        <h4>Time: {{ infos.time}}</h4>
+        <h4>reason: {{ infos.reason}}</h4>
+        <h4>Order Time: {{ infos.order_time }}</h4>
+    </div>
+{% endblock %}

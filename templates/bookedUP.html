@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Book UP
+{% endblock %}
+
+
+{% block body %}
+    <style>
+        form {
+            margin: 20px;
+        }
+    </style>
+
+    <div>
+        <h3 style="text-align: center; margin-bottom: 1cm; ">check your book</h3>
+
+        <h5 style="margin-left: 20px;">write the order id: </h5>
+
+        <input id="order_id_input" class="input-field" autocomplete="off" autofocus name="order_id" placeholder="Order ID">
+        <button onclick="get_order()" class="btn btn-primary" style="height: 40px;" type="submit" >Check</button>
+
+
+        <div id="result">
+            <!-- this space will fulled by javascript-->
+        </div>
+
+    </div>
+
+    <script>
+        let result_element = document.querySelector("#result");
+
+        // To display the order infos
+        function get_order() {
+            var input_element = document.getElementById("order_id_input");
+            let input_value = input_element.value;
+
+            input_value = input_value.replace("#", "")
+
+            if (input_value != "") {
+                fetch('/searchField?order_id=' + input_value)
+                .then(response => response.text())
+                .then(result => {
+                    result_element.innerHTML =  result;
+                })
+            }
+        }
+    </script>
+{% endblock %}

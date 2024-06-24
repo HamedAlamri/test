@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Manger direct
+{% endblock %}
+
+
+{% block body %}
+    <div style="display: flex; flex-wrap: wrap; text-align: center;">
+        <span style="display: inline-block; margin: 20px;">
+            <form action="/manger/orders/booked" method ="get">
+                <button style="border: 1px; margin: 0px; padding: 0px;" type="submit">
+                    <img style="display: block; -webkit-user-select: none; margin: 0px; padding: 0px; border: none; background-color: hsl(0, 0%, 90%); transition: background-color 300ms;"  width="250" height="250" src="/static/orders.png">
+                </button>
+                <h6 style="text-align: center;">Booked Orders</h6>
+            </form>
+        </span>
+
+        <span style="display: inline-block; margin: 20px;">
+            <form action="/manger/orders/completed" method ="get">
+                <button style="border: 1px; margin: 0px; padding: 0px;" type="submit">
+                    <img style="display: block; -webkit-user-select: none; margin: 0px; padding: 0px; border: none; background-color: hsl(0, 0%, 90%); transition: background-color 300ms;"  width="250" height="250" src="/static/completed1.png">
+                </button>
+                <h6 style="text-align: center;">completed Orders</h6>
+            </form>
+        </span>
+
+
+        <span style="display: inline-block; margin: 20px;">
+            <form action="/manger/orders/canceled" method ="get">
+                <button style="border: 1px; margin: 0px; padding: 0px;" type="submit">
+                    <img style="display: block; -webkit-user-select: none; margin: 0px; padding: 0px; border: none; background-color: hsl(0, 0%, 90%); transition: background-color 300ms;"  width="250" height="250" src="/static/cancel.png">
+                </button>
+                <h6 style="text-align: center;">Canceled Orders</h6>
+            </form>
+        </span>
+
+
+</div>
+
+{% endblock %}

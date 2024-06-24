@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+<!-- This page displays general information for a specific field -->
+
+{% block title %}
+    General Field Information
+{% endblock %}
+
+{% block body %}
+<h3 class="text-center mb-5">Check Field Information</h3>
+
+<div class="container">
+    <div class="row">
+        <!-- First Section: Field and Person Information -->
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Field Information</h4>
+                    <p class="card-text"><strong>Field Name:</strong> {{ infos.field_name }}</p>
+                    <p class="card-text"><strong>Field ID:</strong> {{ infos.field_id }}</p>
+                    <p class="card-text"><strong>Manager:</strong> {{ infos.manger_name }}</p>
+                    <p class="card-text"><strong>Phone Number:</strong> {{ infos.manger_PhoneNumber }}</p>
+                    <p class="card-text"><strong>Size:</strong> {{ infos2.size }}</p>
+                    <p class="card-text"><strong>Time:</strong> {{ infos2.time }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Section: Financial Information -->
+        <div class="col-md-6 mb-3">
+            <!-- Total Values Section -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">Total Financial Information</h4>
+                    <p class="card-text"><strong>Total Money:</strong> {{ totalMoney }}</p>
+                    <p class="card-text"><strong>Total Profits:</strong> {{ totalProfit }}</p>
+                    <p class="card-text"><strong>Total Count:</strong> {{ totalCounts }}</p>
+                </div>
+            </div>
+
+            <!-- Individual Values Section -->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Individual Financial Information</h4>
+                    <p class="card-text"><strong>Money:</strong> {{ money }}</p>
+                    <p class="card-text"><strong>Profits:</strong> {{ profit }}</p>
+                    <p class="card-text"><strong>Count:</strong> {{ count }}</p>
+
+
+                    <!-- Reset Button -->
+                    <div style="text-align: center;">
+                        <form action="/resetTheMoney" method="post">
+                            <button class="btn btn-warning" type="submit" name="field_id" value="{{ infos.field_id }}">
+                                Paid Done
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    
+    <!-- Delete Button -->
+    <div class="text-center mt-4">
+        <form action="/delete_field" method="get">
+            <button class="btn btn-danger" type="submit" name="field_id" value="{{ infos.field_id }}">
+                DELETE
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

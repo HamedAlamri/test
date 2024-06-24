@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Manger check field
+{% endblock %}
+
+
+{% block body %}
+    <div style="display: flex; flex-wrap: wrap; text-align: center;">
+        <span style="display: inline-block; margin: 20px;">
+            <form action="/manger/fields/check/{{field_name}}" method ="get">
+                <button style="border: 1px; margin: 0px; padding: 0px;" type="submit" name="field_id" value="{{ field_id }}">
+                    <img style="display: block; -webkit-user-select: none; margin: 0px; padding: 0px; border: none; background-color: hsl(0, 0%, 90%); transition: background-color 300ms;"  width="250" height="250" src="/static/information.png">
+                </button>
+                <h6 style="text-align: center;">General Information</h6>
+            </form>
+        </span>
+
+        <span style="display: inline-block; margin: 20px;">
+            <form action="/manger/fields/check/{{ field_name }}" method ="post">
+                <button style="border: 1px; margin: 0px; padding: 0px;" type="submit" name="field_id" value="{{ field_id }}">
+                    <img style="display: block; -webkit-user-select: none; margin: 0px; padding: 0px; border: none; background-color: hsl(0, 0%, 90%); transition: background-color 300ms;"  width="250" height="250" src="/static/orders.png">
+                </button>
+                <h6 style="text-align: center;">All Orders</h6>
+            </form>
+        </span>
+</div>
+
+{% endblock %}

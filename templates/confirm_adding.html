@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    confirm adding field
+{% endblock %}
+
+
+{% block body %}
+<h3 style="text-align: center; margin-bottom: 1cm; ">field adding information</h3>
+
+    <div style="margin: 20px;">
+        <h4>field Id: {{ infos.field_id}}</h4>
+        <h4>field name: {{ infos.field_name}}</h4>
+        <h4>price: {{ infos.price}}</h4>
+        <h4>location: {{ infos.location_name}}</h4>
+        <h4>imgURL: {{ infos.imgURL}}</h4>
+        <h4>MapURL: {{ infos.mapURL}}</h4>
+        <h4>size: {{ infos.field_size}}</h4>
+        <h4>manger name: {{ infos.manger_name}}</h4>
+        <h4>manger phone: {{ infos.manger_PhoneNumber }}</h4>
+
+        <ol>
+            {% for time in times %}
+                <li>{{ time }}</li>
+            {% endfor %}
+        </ol>
+
+    </div>
+    <div style="text-align: center; margin: 20px;">
+        <a href="/">
+            <button class="btn btn-primary" type="submit">Go To Fields</button>
+        </a>
+    </div>
+{% endblock %}

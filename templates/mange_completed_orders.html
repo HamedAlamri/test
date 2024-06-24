@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+
+<!--this page for submangers to check the orders-->
+
+{% block title %}
+    mange completed orders
+{% endblock %}
+
+
+{% block body %}
+
+    <div>
+        <h3 style="text-align: center; margin-bottom: 1cm; ">All completed orders For {{ field_name }}</h3>
+        <h5> total money: {{ total }}</h5>
+        <h5> profit: {{ profit }}</h5>
+        <h5> count: {{ count }}</h5>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Name Of Person</th>
+                    <th>Phone Number</th>
+                    <th>Name Of Field</th>
+                    <th>Day And Time</th>
+                    <th>Price</th>
+                    <th>To MORE INFO</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for info in infos %}
+                    <tr>
+                        <td>{{ info.id_order }}</td>
+                        <td>{{ info.person_name }}</td>
+                        <td>{{ info.phone_number }}</td>
+                        <td>{{ info.field_name }} / {{ info.size }}</td>
+                        <td>{{ info.day }} / {{ info.time }}</td>
+                        <td>{{ info.price }} R.O</td>
+                        <td>
+
+
+                            <span style="margin: 1px;">
+                                <form action="/manger/orders/completed" method="post" style="margin: 0px;">
+                                    <input hidden name ="from" value = "{{ from_ }}">
+                                    <button class="btn btn-primary" style="margin: 0px;" type="submit" name="id_order" value="{{ info.id_order }}">
+                                        Check
+                                    </button>
+                                </form>
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

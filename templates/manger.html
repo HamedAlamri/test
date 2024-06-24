@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Manger
+{% endblock %}
+
+
+{% block body %}
+    <div style="text-align: center;">
+        <span style="display: inline-block; margin: 20px;">
+            <form action="/manger/fields">
+                <button style="border: 1px; margin: 0px; padding: 0px;" type="submit">
+                    <img style="display: block; -webkit-user-select: none; margin: 0px; padding: 0px; border: none; background-color: hsl(0, 0%, 90%); transition: background-color 300ms;"  width="250" height="250" src="https://rb.gy/zhrr0v">
+                </button>
+                <h6 style="text-align: center;">Fields And Times</h6>
+            </form>
+        </span>
+
+        <span style="display: inline-block; margin: 20px;">
+            <form action="/manger/orders">
+                <button style="border: 1px; margin: 0px; padding: 0px;" type="submit">
+                    <img style="display: block; -webkit-user-select: none; margin: 0px; padding: 0px; border: none; background-color: hsl(0, 0%, 90%); transition: background-color 300ms;"  width="250" height="250" src="https://rb.gy/9u0ax4">
+                </button>
+                <h6 style="text-align: center;">Orders</h6>
+            </form>
+        </span>
+    </div>
+
+{% endblock %}

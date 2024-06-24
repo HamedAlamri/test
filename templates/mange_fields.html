@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Fields Mangements
+{% endblock %}
+
+
+{% block body %}
+<h3 style="text-align: center; margin-bottom: 1cm; ">Fields Mengements</h3>
+
+<div style="text-align: center;">
+    <span style="display: inline-block; margin: 20px;">
+        <form action="/manger/fields/addField">
+            <button style="border: 1px; margin: 0px; padding: 0px;" type="submit">
+                <img style="display: block; -webkit-user-select: none; margin: 0px; padding: 0px; border: none; background-color: hsl(0, 0%, 90%); transition: background-color 300ms;"  width="250" height="250" src="https://en.pimg.jp/087/857/901/1/87857901.jpg">
+            </button>
+            <h6 style="text-align: center;">Add Field</h6>
+        </form>
+    </span>
+
+    <span style="display: inline-block; margin: 20px;">
+        <form action="/manger/fields/check" method="get">
+            <button style="border: 1px; margin: 0px; padding: 0px;" type="submit">
+                <img style="display: block; -webkit-user-select: none; margin: 0px; padding: 0px; border: none; background-color: hsl(0, 0%, 90%); transition: background-color 300ms;"  width="250" height="250" src="data:image/png;base64,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">
+            </button>
+            <h6 style="text-align: center;">Check Field</h6>
+        </form>
+    </span>
+</div>
+
+{% endblock %}

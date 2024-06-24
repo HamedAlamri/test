@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+<!--This page to check all information for specific order-->
+
+{% block title %}
+    check deleting field
+{% endblock %}
+
+
+{% block body %}
+    <h3 style="text-align: center; margin-bottom: 10px; ">Did you sure that you want to delete the field</h3>
+    <h5 style="text-align: center; margin-bottom: 100px">(all related data will deleted)</h5>
+
+    <div class="text-center mt-4">
+        <form action="/delete_field" method="post">
+            <button class="btn btn-danger" type="submit" name="field_id" value="{{ field_id }}">
+                DELETE
+            </button>
+        </form>
+    </div>
+{% endblock %}

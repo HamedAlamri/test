@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    Check Fields
+{% endblock %}
+
+
+{% block body %}
+
+    <div>
+        <h3 style="text-align: center; margin-bottom: 1cm; ">All Fields In Database</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Field ID</th>
+                    <th>Name Of Field</th>
+                    <th>Size</th>
+                    <th>Location</th>
+                    <th>manger infos</th>
+                    <th>img URL</th>
+                    <th>map URL</th>
+                    <th>Price</th>
+                    <th>info </th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for info in infos %}
+
+                    <tr>
+                        <td>{{ info.field_id }}</td>
+                        <td>{{ info.field_name }}</td>
+                        <td>{{ info.field_size }}</td>
+                        <td>{{ info.location_name }}</td>
+                        <td>{{ info.manger_name }} / {{ info.manger_PhoneNumber }}</td>
+                        <td><a href="{{ info.imgURL }}">visit image</a></td>
+                        <td><a href="{{ info.mapURL }}">visit location</a></td>
+                        <td>{{ info.price }} R.O</td>
+                        <td>
+                            <form action="/manger/fields/check" method="post">
+                                <button class="btn btn-primary" type="submit" name="field_id" value="{{ info.field_id }}">
+                                    check
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Cancel Order
+{% endblock %}
+
+{% block body %}
+<h5 style="text-align: center;">Do you want to cancel the order?</h5>
+
+<span>
+    <h4>person info: {{ info.person_name }} / {{ info.phone_number }}</h4>
+    <h4>field info: {{ info.field_name }} / {{ info.size}}</h4>
+    <h4>Day and time: {{ info.day }} / {{ info.time }}</h4>
+    <h4>Price: {{ info.price }} R.O</h4>
+</span>
+
+<form action="/cancel" method="get">
+    <input name="order_id" hidden value="{{ info.id_order }}">
+    <h6>what is the reason?</h6>
+    <input name="reason" placeholder="Why?" autocomplete="off" autofocus required>
+    <button class="btn btn-primary" style="background-color: red;">Cancel</button>
+</form>
+{% endblock %}

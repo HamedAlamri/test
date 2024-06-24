@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+<!--This page to check all information for specific order-->
+
+{% block title %}
+    Check order
+{% endblock %}
+
+
+{% block body %}
+<h3 style="text-align: center; margin-bottom: 1cm; ">Check order</h3>
+
+    <div style="margin: 20px;">
+        <h4>Order Id: {{ infos.id_order}}</h4>
+        <h4>person: {{ infos.person_name}}</h4>
+        <h4>Number: {{ infos.phone_number}}</h4>
+        <h4>Field: {{ infos.field_name}}</h4>
+        <h4>Size: {{ infos.size}}</h4>
+        <h4>Day: {{ infos.day}}</h4>
+        <h4>Time: {{ infos.time}}</h4>
+        <h4>Price: {{ infos.price}} R.O</h4>
+        <h4>state: {{ infos.stateTEXT }}</h4>
+        <h4>Comments: {{ infos.comments}}</h4>
+        <h4>Order Time: {{ infos.order_time }}</h4>
+    </div>
+{% endblock %}
